@@ -21,7 +21,6 @@ typedef struct User User;
 struct User
 {
     char username[100];
-    char isAuth;
     char homepath[100];
     char fullpath[110];
     char dbFile[10];
