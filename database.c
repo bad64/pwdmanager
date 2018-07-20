@@ -116,9 +116,62 @@ void View(struct DBRow *document, int lines)
     }
 }
 
-void DeleteRow(struct DBRow *document, int line)
+void DeleteRow(char* pathtofile, struct DBRow *document, int line)
 {
-    //TODO
+    line -= 1;
+    int lines = GetNumberOfLines(pathtofile);
+    int i;
+
+    if (lines == 1)
+    {
+        printf("Nothing to delete\n");
+    }
+    else if (line >= lines-1)
+    {
+        printf("Invalid index\n");
+    }
+    else
+    {
+        for (i = 0; i < lines; i++)
+        {
+            if (i == line)
+            {
+                document[line].id = 0;
+                strcpy(document[line].login, "");
+                strcpy(document[line].purpose, "");
+                strcpy(document[line].password, "");
+            }
+        }
+
+        for (i = line; i < lines; i++)
+        {
+            struct DBRow buffer = document[i];
+            document[i] = document[i+1];
+            document[i].id = i;
+            document[i+1] = buffer;
+        }
+
+        for (i = 0; i < lines; i++)
+        {
+            document[i].id = i+1;
+        }
+
+        for (i = 0; i < 100; i++)
+        {
+            if (strcmp(document[i].login, "") == 0)
+            {
+                document[i].id = 0;
+            }
+        }
+
+        if (lines-2 != 0)
+            View(document, lines);
+        else
+            printf("Database is now empty\n");
+
+        WriteToFile(pathtofile, document, lines-2);
+        ReadFromFile(pathtofile, document);
+    }
 }
 
 void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
@@ -153,7 +206,7 @@ void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
     }
 }
 
-void WriteToFile(char* pathtofile, struct DBRow *document)
+void WriteToFile(char* pathtofile, struct DBRow *document, int lines)
 {
     FILE* file = fopen(pathtofile, "w");
 
@@ -165,7 +218,7 @@ void WriteToFile(char* pathtofile, struct DBRow *document)
     else
     {
         int i;
-        for (i = 1; i < sizeof(document)/sizeof(struct DBRow); i++)
+        for (i = 0; i < lines; i++)
         {
             fprintf(file, "%d,%s,%s,%s,\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
         }

@@ -44,9 +44,9 @@ struct DBRow Generate(User user, int lines);
 void ReadFromFile(char* pathtofile, struct DBRow *document);
 int GetNumberOfLines(char* pathtofile);
 void View(struct DBRow *document, int lines);
-void DeleteRow(struct DBRow *document, int line);
+void DeleteRow(char* pathtofile, struct DBRow *document, int line);
 void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines);
-void WriteToFile(char* pathtofile, struct DBRow *document);
+void WriteToFile(char* pathtofile, struct DBRow *document, int lines);
 void AppendToFile(char* pathtofile, struct DBRow info);
 
 #endif // INCLUDES_H

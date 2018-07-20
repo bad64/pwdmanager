@@ -12,8 +12,6 @@ Just type "help" ! It's pretty easy, really. I mean, it's not a man page, but it
 
 **TODO**
 
-About the only thing missing from what I would consider a minimum viable product is the ability to delete a row from the "database" (which is just a glorfied .csv).
-
 Encryption could also be a nice feature, although I trust (maybe erroneously) file permissions to handle access control to the passwords file for me. Makes sense on Linux, makes a lot less sense on Windows. Either way, it could be a neat addition, if I ever figure how to do that on my own (I purposely avoided using nonstandard libraries like SQLite for this program).
 
 # IMPORTANT NOTE

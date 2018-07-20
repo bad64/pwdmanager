@@ -137,6 +137,14 @@ int main()
             lines = GetNumberOfLines(user.fullpath);
             AppendToFile(user.fullpath, Generate(user, lines));
         }
+        else if (strcmp(args[0], "?lines") == 0)
+        {
+            printf("%d lines found\n\n", GetNumberOfLines(user.fullpath));
+
+            int i;
+            for (i = 0; i < GetNumberOfLines(user.fullpath); i++)
+                printf("Line %d: %d    %s    %s    %s\n", i, document[i].id, document[i].login, document[i].purpose, document[i].password);
+        }
         else if ((strcmp(args[0], "view") == 0) || (strcmp(args[0], "ls") == 0))
         {
             lines = GetNumberOfLines(user.fullpath);
@@ -148,12 +156,13 @@ int main()
         {
             if (args[1] == NULL)
             {
-                //printf("Missing parameter: row\n");
-                printf("Feature not implemented yet\n");
+                printf("Missing parameter: row\n");
             }
             else
             {
-                printf("Feature not implemented yet\n");
+                int line;
+                sscanf(args[1], "%d", &line);
+                DeleteRow(user.fullpath, document, line);
             }
         }
         else if (strcmp(args[0], "get") == 0)
