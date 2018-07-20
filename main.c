@@ -6,7 +6,11 @@ int main()
 
     //Set up user struct
     User user;
-    strcpy(user.username, getenv("USERNAME"));
+    #if (defined (_WIN32) || defined (_WIN64))
+    	strcpy(user.username, getenv("USERNAME"));
+    #elif (defined (LINUX) || defined (__linux__))
+	    strcpy(user.username, getenv("USER"));
+    #endif
 
     //Check if DB exists
     #if (defined (_WIN32) || defined (_WIN64))
@@ -52,14 +56,13 @@ int main()
 
     if (db == NULL)
     {
-        fclose(db);
-        fopen(user.fullpath, "w");
-        fclose(db);
+        fopen(user.fullpath, "w");  //Open in write mode to create the file if it does not exist
     }
     int lines = GetNumberOfLines(user.fullpath);
 
     struct DBRow* document = malloc(100 * sizeof(struct DBRow));
     ReadFromFile(user.fullpath, document);
+    fclose(db);
 
     //Some useful stuff
     char prompt[5] = ">>> ";        //Looks cool
