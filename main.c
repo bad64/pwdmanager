@@ -60,6 +60,10 @@ int main()
     }
     int lines = GetNumberOfLines(user.fullpath);
 
+    #if (defined (LINUX) || defined (__linux__))
+        chmod(user.fullpath, S_IRWXU);
+    #endif
+
     struct DBRow* document = malloc(100 * sizeof(struct DBRow));
     ReadFromFile(user.fullpath, document);
     fclose(db);
