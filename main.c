@@ -76,7 +76,7 @@ int main()
     char looping = 1;               //Tells if the program should keep looping
 
     //Main program loop
-    printf("pwdmanager console v0.9 by Bad64\n");
+    printf("pwdmanager console v1.0 by Bad64\n");
 
     while (looping)
     {
@@ -129,7 +129,7 @@ int main()
         }
         else if (strcmp(args[0], "about") == 0)
         {
-            printf("pwdmanager console v0.9 by Bad64\n");
+            printf("pwdmanager console v1.0 by Bad64\n");
             printf("Build dated %s %s with gcc %s\n", __DATE__, __TIME__, __VERSION__);
         }
         else if (strcmp(args[0], "new") == 0)
