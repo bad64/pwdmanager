@@ -8,7 +8,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#define VERSION 1.1
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 12
 
 #if (defined (_WIN32) || defined (_WIN64))
     #include <conio.h>

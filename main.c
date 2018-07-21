@@ -130,7 +130,7 @@ int main()
         }
         else if (strcmp(args[0], "about") == 0)
         {
-            printf("pwdmanager console v%.1f by Bad64\n", VERSION);
+            printf("pwdmanager console v%d.%d by Bad64\n", VERSION_MAJOR, VERSION_MINOR);
             printf("Build dated %s %s with ", __DATE__, __TIME__);
 
             #if (defined (__GNUC__))
@@ -147,13 +147,11 @@ int main()
         else if (strcmp(args[0], "new") == 0)
         {
             lines = GetNumberOfLines(user.fullpath);
-            lines += 1;
             AppendToFile(user.fullpath, Generate(user, lines));
         }
         else if ((strcmp(args[0], "view") == 0) || (strcmp(args[0], "ls") == 0))
         {
             lines = GetNumberOfLines(user.fullpath);
-            lines += 1;
             ReadFromFile(user.fullpath, document);  //Reload db
             View(document, lines);
         }
