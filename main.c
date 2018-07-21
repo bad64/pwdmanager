@@ -8,7 +8,7 @@ int main()
     User user;
     #if (defined (_WIN32) || defined (_WIN64))
     	strcpy(user.username, getenv("USERNAME"));
-    #elif (defined (LINUX) || defined (__linux__))
+    #elif (defined (LINUX) || defined (__linux__) || defined(__APPLE__))
 	    strcpy(user.username, getenv("USER"));
     #endif
 
@@ -17,7 +17,7 @@ int main()
         strcpy(user.homepath, getenv("USERPROFILE"));
         strcat(user.homepath, "\\Documents\\passwordmanager\\");
         strcpy(user.dbFile, ".passwords");
-    #elif (defined (LINUX) || defined (__linux__))
+    #elif (defined (LINUX) || defined (__linux__) || defined(__APPLE__))
         strcpy(user.homepath, getenv("HOME"));
         strcat(user.homepath, "/.passwordmanager/");
         strcpy(user.dbFile, "passwords");
@@ -29,7 +29,8 @@ int main()
     {
         if (info.st_mode & S_IFDIR)
         {
-
+            //Means everything is fine. No need to do anything here.
+            //Truth be told, this block only exists because I don't know how bitwise works.
         }
         else
         {
@@ -76,7 +77,7 @@ int main()
     char looping = 1;               //Tells if the program should keep looping
 
     //Main program loop
-    printf("pwdmanager console v1.0 by Bad64\n");
+    printf("pwdmanager console by Bad64\n");
 
     while (looping)
     {
@@ -129,25 +130,30 @@ int main()
         }
         else if (strcmp(args[0], "about") == 0)
         {
-            printf("pwdmanager console v1.0 by Bad64\n");
-            printf("Build dated %s %s with gcc %s\n", __DATE__, __TIME__, __VERSION__);
+            printf("pwdmanager console v%.1f by Bad64\n", VERSION);
+            printf("Build dated %s %s with ", __DATE__, __TIME__);
+
+            #if (defined (__GNUC__))
+                printf("gcc %s\n", __VERSION__);
+            #elif (defined (__clang__))
+                printf("clang %s\n", __clang_version__);
+            #elif (defined (__EMSCRIPTEN__))
+                printf("emscripten (?!) %s\n", __clang_version__);  //You brave soul.
+            #endif
+            printf("\n");
+            printf("This is where I'd put a Patreon link if I had one !\n");
+            printf("\n");
         }
         else if (strcmp(args[0], "new") == 0)
         {
             lines = GetNumberOfLines(user.fullpath);
+            lines += 1;
             AppendToFile(user.fullpath, Generate(user, lines));
-        }
-        else if (strcmp(args[0], "?lines") == 0)
-        {
-            printf("%d lines found\n\n", GetNumberOfLines(user.fullpath));
-
-            int i;
-            for (i = 0; i < GetNumberOfLines(user.fullpath); i++)
-                printf("Line %d: %d    %s    %s    %s\n", i, document[i].id, document[i].login, document[i].purpose, document[i].password);
         }
         else if ((strcmp(args[0], "view") == 0) || (strcmp(args[0], "ls") == 0))
         {
             lines = GetNumberOfLines(user.fullpath);
+            lines += 1;
             ReadFromFile(user.fullpath, document);  //Reload db
             View(document, lines);
         }

@@ -8,11 +8,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#define VERSION 1.1
+
 #if (defined (_WIN32) || defined (_WIN64))
     #include <conio.h>
     #include <io.h>
     #include <windows.h>
-#elif (defined (LINUX) || defined (__linux__))
+#elif (defined (LINUX) || defined (__linux__) || defined(__APPLE__))
     #include <unistd.h>
 #endif
 

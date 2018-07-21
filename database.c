@@ -118,8 +118,9 @@ void View(struct DBRow *document, int lines)
 
 void DeleteRow(char* pathtofile, struct DBRow *document, int line)
 {
-    line -= 1;
+    line -= 1;  //Lines are 0-based, the 1st line has index 0, etc, you get the idea
     int lines = GetNumberOfLines(pathtofile);
+    lines += 1; //Well they *are* 0-based, so we increase the number of lines by 1 to match line numbers
     int i;
 
     if (lines == 1)
@@ -220,7 +221,9 @@ void WriteToFile(char* pathtofile, struct DBRow *document, int lines)
         int i;
         for (i = 0; i < lines; i++)
         {
-            fprintf(file, "%d,%s,%s,%s,\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
+            if (i != 0)
+                fprintf(file, ",\n");
+            fprintf(file, "%d,%s,%s,%s", document[i].id, document[i].login, document[i].purpose, document[i].password);
         }
         fclose(file);
     }
@@ -237,8 +240,8 @@ void AppendToFile(char* pathtofile, struct DBRow info)
     }
     else
     {
-        fprintf(file, "%d,%s,%s,%s,", info.id, info.login, info.purpose, info.password);
-        fprintf(file, "\n");
+        fprintf(file, ",\n");
+        fprintf(file, "%d,%s,%s,%s", info.id, info.login, info.purpose, info.password);
         fclose(file);
     }
 }
