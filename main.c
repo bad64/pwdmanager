@@ -42,7 +42,7 @@ int main()
     {
         #if (defined (_WIN32) || defined (_WIN64))
             CreateDirectoryA(user.homepath, NULL);
-        #elif (defined (LINUX) || defined (__linux__))
+        #elif (defined (LINUX) || defined (__linux__) || defined(__APPLE__))
             mkdir(user.homepath, S_IRWXU);
             chmod(user.homepath, S_IRWXU);
         #endif
@@ -61,7 +61,7 @@ int main()
     }
     int lines = GetNumberOfLines(user.fullpath);
 
-    #if (defined (LINUX) || defined (__linux__))
+    #if (defined (LINUX) || defined (__linux__) || defined(__APPLE__))
         chmod(user.fullpath, S_IRWXU);
     #endif
 
