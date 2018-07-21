@@ -57,7 +57,7 @@ int GetNumberOfLines(char* pathtofile)
 
     if (file == NULL)
     {
-        printf("ERROR: Cannot write to .password file !!\n");
+        printf("ERROR: Cannot read number of lines from .password file !!\n");
         exit(1);
     }
     else
@@ -221,7 +221,7 @@ void WriteToFile(char* pathtofile, struct DBRow *document, int lines)
 
     if (file == NULL)
     {
-        printf("ERROR: Cannot write to .password file !!\n");
+        printf("ERROR: Cannot write to .password file !!\n");   //That should not happen ?
         exit(1);
     }
     else
