@@ -186,9 +186,11 @@ int main()
                 printf("Usage: get <attribute> <expression>\n");
                 printf("    <attribute> can be either \"username\" or \"for\"\n");
                 printf("    <expression> is a case sensitive string to search for in the database\n");
+                printf("        -If <expression> should have spaces in it, replace them with + signs !\n");
             }
             else
             {
+                printf("%s\n", args[2]);
                 lines = GetNumberOfLines(user.fullpath);
                 ReadFromFile(user.fullpath, document);
                 GetByAttribute(args[1], args[2], document, lines);

@@ -179,6 +179,13 @@ void DeleteRow(char* pathtofile, struct DBRow *document, int line)
 void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
 {
     int i;
+
+    for (i = 0; i < strlen(attr); i++)
+    {
+        if (attr[i] == '+')
+            attr[i] = ' ';
+    }
+
     if (strcmp(type, "id") == 0)
     {
         int buf;
