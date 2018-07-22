@@ -50,6 +50,6 @@ void View(struct DBRow *document, int lines);
 void DeleteRow(char* pathtofile, struct DBRow *document, int line);
 void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines);
 void WriteToFile(char* pathtofile, struct DBRow *document, int lines);
-void AppendToFile(char* pathtofile, struct DBRow info);
+void AppendToFile(char* pathtofile, struct DBRow info, int lines);
 
 #endif // INCLUDES_H

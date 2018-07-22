@@ -68,9 +68,10 @@ int GetNumberOfLines(char* pathtofile)
         {
             buffer = fgetc(file);
             if (buffer == '\n')
+            {
                 lines++;
+            }
         }
-        lines+=1;
 
         fclose(file);
         return lines;
@@ -80,7 +81,7 @@ int GetNumberOfLines(char* pathtofile)
 void View(struct DBRow *document, int lines)
 {
     //printf("%d\n", lines);
-    if (lines-1 <= 0)
+    if (lines-1 < 0)
     {
         printf("Nothing to read\n");
     }
@@ -229,15 +230,13 @@ void WriteToFile(char* pathtofile, struct DBRow *document, int lines)
         int i;
         for (i = 0; i < lines; i++)
         {
-            if (i != 0)
-                fprintf(file, ",\n");
-            fprintf(file, "%d,%s,%s,%s", document[i].id, document[i].login, document[i].purpose, document[i].password);
+            fprintf(file, "%d,%s,%s,%s,\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
         }
         fclose(file);
     }
 }
 
-void AppendToFile(char* pathtofile, struct DBRow info)
+void AppendToFile(char* pathtofile, struct DBRow info, int lines)
 {
     FILE* file = fopen(pathtofile, "a");
 
@@ -248,8 +247,7 @@ void AppendToFile(char* pathtofile, struct DBRow info)
     }
     else
     {
-        fprintf(file, ",\n");
-        fprintf(file, "%d,%s,%s,%s", info.id, info.login, info.purpose, info.password);
+        fprintf(file, "%d,%s,%s,%s,\n", info.id, info.login, info.purpose, info.password);
         fclose(file);
     }
 }

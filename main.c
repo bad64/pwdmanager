@@ -147,7 +147,7 @@ int main()
         else if (strcmp(args[0], "new") == 0)
         {
             lines = GetNumberOfLines(user.fullpath);
-            AppendToFile(user.fullpath, Generate(user, lines));
+            AppendToFile(user.fullpath, Generate(user, lines), lines);
         }
         else if ((strcmp(args[0], "view") == 0) || (strcmp(args[0], "ls") == 0))
         {
@@ -190,7 +190,6 @@ int main()
             }
             else
             {
-                printf("%s\n", args[2]);
                 lines = GetNumberOfLines(user.fullpath);
                 ReadFromFile(user.fullpath, document);
                 GetByAttribute(args[1], args[2], document, lines);
