@@ -67,7 +67,6 @@ int main()
 
     struct DBRow* document = malloc(100 * sizeof(struct DBRow));
     ReadFromFile(user.fullpath, document);
-    fclose(db);
 
     //Some useful stuff
     char prompt[5] = ">>> ";        //Looks cool

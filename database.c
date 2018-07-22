@@ -146,7 +146,6 @@ void View(struct DBRow *document, int lines)
 
                 printf("|\n");
             }
-                //printf("%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
         }
 
     }
