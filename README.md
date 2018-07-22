@@ -5,6 +5,7 @@ One day I woke up with a notification that someone tried to use my Gmail account
 It is written in C, is pretty lightweight (compared to most of the stuff I did that you can find on my GitHub), but it's still a bit incomplete.
 
 Passwords are saved in Documents\passwordmanager on Windows, and $HOME/.passwordmanager on Linux. No idea on MacOS. Can't test, won't test.
+**UPDATE 22/7/18:** MacOS version will compile but not work as intended due to clang. Since I do not actually have a Mac myself, I cannot debug it. Feel free to, if you have the time and can bother with clang.
 
 **HOW TO USE**
 
