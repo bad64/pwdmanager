@@ -87,20 +87,37 @@ void View(struct DBRow *document, int lines)
     }
     else
     {
-        int i;
-        char header[100];
+        int i, j;
+        char header[200];
         header[0] = '\0';
+        int maxlogin, maxpurpose, maxpassword;
+        maxlogin = 15;
+        maxpurpose = 20;
+        maxpassword = 30;
+
+        //Determining the longest fields
+        for (i = 0; i < lines; i++)
+        {
+            if (strlen(document[i].login) > maxlogin)
+                maxlogin = strlen(document[i].login);
+
+            if (strlen(document[i].purpose) > maxpurpose)
+                maxpurpose = strlen(document[i].purpose);
+
+            if (strlen(document[i].password) > maxpassword)
+                maxpassword = strlen(document[i].password);
+        }
 
         //Just making a nice header here
         strcat(header, "|ID   ");
         strcat(header, "|USERNAME");
-        for (i = 0; i < 15-strlen("USERNAME"); i++)
+        for (i = 0; i < maxlogin-strlen("USERNAME"); i++)
             strcat(header, " ");
         strcat(header, "|FOR");
-        for (i = 0; i < 20-strlen("FOR"); i++)
+        for (i = 0; i < maxpurpose-strlen("FOR"); i++)
             strcat(header, " ");
         strcat(header, "|PASSWORD");
-        for (i = 0; i < 30-strlen("PASSWORD"); i++)
+        for (i = 0; i < maxpassword-strlen("PASSWORD"); i++)
             strcat(header, " ");
         strcat(header, "|\n");
         printf("%s", header);
@@ -112,7 +129,24 @@ void View(struct DBRow *document, int lines)
         for (i = 0; i < lines; i++)
         {
             if (document[i].id != 0)
-                printf("|%-5d|%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
+            {
+                printf("|%-5d", document[i].id);
+
+                printf("|%s", document[i].login);
+                for (j = 0; j < maxlogin - strlen(document[i].login); j++)
+                    printf(" ");
+
+                printf("|%s", document[i].purpose);
+                for (j = 0; j < maxpurpose - strlen(document[i].purpose); j++)
+                    printf(" ");
+
+                printf("|%s", document[i].password);
+                for (j = 0; j < maxpassword - strlen(document[i].password); j++)
+                    printf(" ");
+
+                printf("|\n");
+            }
+                //printf("%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
         }
 
     }
