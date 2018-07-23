@@ -121,6 +121,7 @@ int main()
             printf("Available commands:\n");
             printf("    about: Displays technical information about the software\n");
             printf("    new: Generates a new entry in the local records\n");
+            printf("    add: Adds an entry with user-defined (instead of generated) password to the local records\n");
             printf("    view or ls: Lists all entries in the local record\n");
             printf("    delete <row>: Deletes table entry corresponding to row number\n");
             printf("    get <type> <expression>: Returns all table entries which have at least one term matching with the expression\n");
@@ -147,6 +148,11 @@ int main()
         {
             lines = GetNumberOfLines(user.fullpath);
             AppendToFile(user.fullpath, Generate(user, lines), lines);
+        }
+        else if (strcmp(args[0], "add") == 0)
+        {
+            lines = GetNumberOfLines(user.fullpath);
+            AppendToFile(user.fullpath, Add(user, lines), lines);
         }
         else if ((strcmp(args[0], "view") == 0) || (strcmp(args[0], "ls") == 0))
         {

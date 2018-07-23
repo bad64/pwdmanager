@@ -165,7 +165,87 @@ struct DBRow Generate(User user, int lines)
     printf("User %s will have password %s for %s\n", username, password, purpose);
 
     struct DBRow info;
-    info.id = lines;
+    info.id = lines+1;
+    printf("Stored on line %d\n", info.id);
+    strcpy(info.login, username);
+    strcpy(info.purpose, purpose);
+
+    strcpy(info.password, password);
+
+    return info;
+}
+
+struct DBRow Add(User user, int lines)
+{
+    char responsebuffer[50] = {0};
+    char username[50] = {0};
+    char purpose[50] = {0};
+    char password[100] = {0};
+    int i;
+
+    //Username ?
+    printf("Please enter the username that will be associated with this password: [%s] ", user.username);
+    fgets(responsebuffer, 50, stdin);
+
+    if (responsebuffer[0] == 10)
+        strcpy(username, user.username);
+    else
+        strcpy(username, responsebuffer);
+
+    for (i = 0; i < strlen(username); i++)
+    {
+        if (username[i] == '\n')
+        {
+            username[i] = '\0';
+        }
+    }
+
+    responsebuffer[0] = '\0';
+
+    //What will this password be used for ?
+    do
+    {
+        printf("Please enter the entity associated with the credentials pair that will be created (e.g. website, application...): ");
+        fgets(responsebuffer, 50, stdin);
+    }
+    while(responsebuffer[0] == 10);
+
+    for (i = 0; i < strlen(responsebuffer); i++)
+    {
+        if (responsebuffer[i] == '\n')
+        {
+            responsebuffer[i] = '\0';
+        }
+    }
+
+    strcpy(purpose, responsebuffer);
+    purpose[strlen(purpose)] = '\0';
+    responsebuffer[0] = '\0';
+
+    //The actual password
+    do
+    {
+        printf("Please enter the password to store: ");
+        fgets(responsebuffer, 50, stdin);
+    }
+    while(responsebuffer[0] == 10);
+
+    for (i = 0; i < strlen(responsebuffer); i++)
+    {
+        if (responsebuffer[i] == '\n')
+        {
+            responsebuffer[i] = '\0';
+        }
+    }
+
+    strcpy(password, responsebuffer);
+    password[strlen(password)] = '\0';
+    responsebuffer[0] = '\0';
+
+    printf("User %s will have password %s for %s\n", username, password, purpose);
+
+    struct DBRow info;
+    info.id = lines+1;
     printf("Stored on line %d\n", info.id);
     strcpy(info.login, username);
     strcpy(info.purpose, purpose);
