@@ -181,23 +181,26 @@ int main()
                 printf("Missing parameter: type\n");
                 printf("Type \"get help\" or \"get ?\" for additional help\n");
             }
-            else if (args[2] == NULL)
-            {
-                printf("Missing parameter: expression\n");
-                printf("Type \"get help\" or \"get ?\" for additional help\n");
-            }
-            else if ((strcmp(args[1], "help") == 0) || (strcmp(args[1], "help") == 0))
-            {
-                printf("Usage: get <attribute> <expression>\n");
-                printf("    <attribute> can be either \"username\" or \"for\"\n");
-                printf("    <expression> is a case sensitive string to search for in the database\n");
-                printf("        -If <expression> should have spaces in it, replace them with + signs !\n");
-            }
             else
             {
-                lines = GetNumberOfLines(user.fullpath);
-                ReadFromFile(user.fullpath, document);
-                GetByAttribute(args[1], args[2], document, lines);
+                if ((strcmp(args[1], "help") == 0) || (strcmp(args[1], "?") == 0))
+                {
+                    printf("Usage: get <attribute> <expression>\n");
+                    printf("    <attribute> can be either \"id\", \"username\", \"for\", or \"password\"\n");
+                    printf("    <expression> is a case sensitive string to search for in the database\n");
+                    printf("        -If <expression> should have spaces in it, replace them with + signs !\n");
+                }
+                else if (args[2] == NULL)
+                {
+                    printf("Missing parameter: expression\n");
+                    printf("Type \"get help\" or \"get ?\" for additional help\n");
+                }
+                else
+                {
+                    lines = GetNumberOfLines(user.fullpath);
+                    ReadFromFile(user.fullpath, document);
+                    GetByAttribute(args[1], args[2], document, lines);
+                }
             }
         }
         else

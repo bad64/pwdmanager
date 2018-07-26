@@ -224,6 +224,7 @@ void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
     {
         int buf;
         sscanf(attr, "%d", &buf);
+        buf -= 1;
 
         printf("|%-5d|%-15s|%-20s|%-30s|\n", document[buf].id, document[buf].login, document[buf].purpose, document[buf].password);
     }
@@ -240,6 +241,14 @@ void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
         for (i = 0; i <= lines; i++)
         {
             if (strcmp(document[i].purpose, attr) == 0)
+                printf("|%-5d|%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
+        }
+    }
+    else if (strcmp(type, "password") == 0)
+    {
+        for (i = 0; i <= lines; i++)
+        {
+            if (strcmp(document[i].password, attr) == 0)
                 printf("|%-5d|%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
         }
     }

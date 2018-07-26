@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 12
+#define VERSION_MINOR 13
 
 #if (defined (_WIN32) || defined (_WIN64))
     #include <conio.h>
@@ -42,6 +42,7 @@ unsigned long GetSeed();
 
 //random.c
 struct DBRow Generate(User user, int lines);
+struct DBRow Add(User user, int lines);
 
 //database.c
 void ReadFromFile(char* pathtofile, struct DBRow *document);

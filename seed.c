@@ -13,9 +13,10 @@ unsigned long GetSeed()
     char username[30];
     #if (defined (_WIN32) || defined (_WIN64))
     	strcpy(username, getenv("USERNAME"));
-    #elif (defined (LINUX) || defined (__linux__))
+    #elif (defined (LINUX) || defined (__linux__) || defined(__APPLE__))
 	    strcpy(username, getenv("USER"));
     #endif
+
     char *ptr;
     unsigned int hash = strtoul(username, &ptr, 36);
     unsigned int programStart = time(NULL);
