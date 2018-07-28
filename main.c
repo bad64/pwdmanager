@@ -255,6 +255,22 @@ int main(int argc, char* argv[])
                 }
             }
         }
+        else if (strcmp(args[0], "copy") == 0)
+        {
+            if (args[1] == NULL)
+            {
+                printf("Missing parameter: line\n");
+            }
+            else
+            {
+                int line;
+                sscanf(args[1], "%d", &line);
+                line -= 1;
+
+                ReadFromFile(user.fullpath, document);
+                CopyToClipboard(document, line);
+            }
+        }
         else
         {
             printf("Unknown command; type \"help\" or \"?\" for a list of available commands\n");
