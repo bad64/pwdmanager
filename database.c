@@ -1,6 +1,6 @@
 #include "includes.h"
 
-void ReadFromFile(char* pathtofile, struct DBRow *document)
+void ReadFromFile(char* pathtofile, DBRow *document)
 {
     FILE* file = fopen(pathtofile, "r");
 
@@ -15,7 +15,7 @@ void ReadFromFile(char* pathtofile, struct DBRow *document)
         int index = 0, col = 0;
         char* ptr;
 
-        struct DBRow rowbuffer;
+        DBRow rowbuffer;
 
         while (fgets(buffer, 350, file) != NULL)
         {
@@ -78,7 +78,7 @@ int GetNumberOfLines(char* pathtofile)
     }
 }
 
-void View(struct DBRow *document, int lines)
+void View(DBRow *document, int lines)
 {
     //printf("%d\n", lines);
     if (lines-1 < 0)
@@ -151,7 +151,7 @@ void View(struct DBRow *document, int lines)
     }
 }
 
-void DeleteRow(char* pathtofile, struct DBRow *document, int line)
+void DeleteRow(char* pathtofile, DBRow *document, int line)
 {
     line -= 1;  //Lines are 0-based, the 1st line has index 0, etc, you get the idea
     int lines = GetNumberOfLines(pathtofile);
@@ -181,7 +181,7 @@ void DeleteRow(char* pathtofile, struct DBRow *document, int line)
 
         for (i = line; i < lines; i++)
         {
-            struct DBRow buffer = document[i];
+            DBRow buffer = document[i];
             document[i] = document[i+1];
             document[i].id = i;
             document[i+1] = buffer;
@@ -210,10 +210,9 @@ void DeleteRow(char* pathtofile, struct DBRow *document, int line)
     }
 }
 
-void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
+void GetByAttribute(char *type, char *attr, DBRow *document, int lines)
 {
     int i;
-
     for (i = 0; i < strlen(attr); i++)
     {
         if (attr[i] == '+')
@@ -226,30 +225,334 @@ void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
         sscanf(attr, "%d", &buf);
         buf -= 1;
 
-        printf("|%-5d|%-15s|%-20s|%-30s|\n", document[buf].id, document[buf].login, document[buf].purpose, document[buf].password);
+        if ((buf > lines-1) || (buf < 0))
+        {
+            printf("No matching records found\n");
+        }
+        else
+        {
+            int maxlogin, maxpurpose, maxpassword;
+            maxlogin = 15;
+            maxpurpose = 20;
+            maxpassword = 30;
+
+            if (strlen(document[buf].login) > maxlogin)
+                maxlogin = strlen(document[buf].login);
+
+            if (strlen(document[buf].purpose) > maxpurpose)
+                maxpurpose = strlen(document[buf].purpose);
+
+            if (strlen(document[buf].password) > maxpassword)
+                maxpassword = strlen(document[buf].password);
+
+            printf("|ID   ");
+            printf("|USERNAME");
+            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
+                printf(" ");
+
+            printf("|FOR");
+            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
+                printf(" ");
+
+            printf("|PASSWORD");
+            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
+                printf(" ");
+
+            printf("|\n");
+
+            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
+                printf("-");
+            printf("\n");
+
+            printf("|%-5d", document[buf].id);
+
+            printf("|%s", document[buf].login);
+            if (strlen(document[buf].login) < maxlogin)
+            {
+                for (i = 0; i < maxlogin-strlen(document[buf].login); i++)
+                printf(" ");
+            }
+
+            printf("|%s", document[buf].purpose);
+            if (strlen(document[buf].purpose) < maxpurpose)
+            {
+                for (i = 0; i < maxpurpose-strlen(document[buf].purpose); i++)
+                printf(" ");
+            }
+
+            printf("|%s", document[buf].password);
+            if (strlen(document[buf].password) < maxpassword)
+            {
+                for (i = 0; i < maxpassword-strlen(document[buf].password); i++)
+                printf(" ");
+            }
+            printf("|\n");
+        }
     }
-    else if (strcmp(type, "username") == 0)
+    else if ((strcmp(type, "username") == 0) || (strcmp(type, "user") == 0))
     {
+        int j = 0;
+        int matches = 0;
+
         for (i = 0; i <= lines; i++)
         {
             if (strcmp(document[i].login, attr) == 0)
-                printf("|%-5d|%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
+            {
+                matches++;
+            }
+        }
+
+        if (matches == 0)
+        {
+            printf("No matching records found\n");
+        }
+        else
+        {
+            DBRow* results = malloc(sizeof(DBRow) * matches);
+
+            for (i = 0; i <= lines; i++)
+            {
+                if (strcmp(document[i].login, attr) == 0)
+                {
+                    results[j] = document[i];
+                    j++;
+                }
+            }
+
+            //Pretty printout, ENGAGE
+
+            int maxlogin, maxpurpose, maxpassword;
+            maxlogin = 15;
+            maxpurpose = 20;
+            maxpassword = 30;
+
+            for (i = 0; i < matches; i++)
+            {
+                if (strlen(results[i].login) > maxlogin)
+                    maxlogin = strlen(results[i].login);
+
+                if (strlen(results[i].purpose) > maxpurpose)
+                    maxpurpose = strlen(results[i].purpose);
+
+                if (strlen(results[i].password) > maxpassword)
+                    maxpassword = strlen(results[i].password);
+            }
+
+            printf("|ID   ");
+            printf("|USERNAME");
+            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
+                printf(" ");
+
+            printf("|FOR");
+            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
+                printf(" ");
+
+            printf("|PASSWORD");
+            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
+                printf(" ");
+
+            printf("|\n");
+
+            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
+                printf("-");
+            printf("\n");
+
+            for (i = 0; i < matches; i++)
+            {
+                printf("|%-5d", results[i].id);
+
+                printf("|%s", results[i].login);
+                for (j = 0; j < maxlogin - strlen(results[i].login); j++)
+                    printf(" ");
+
+                printf("|%s", results[i].purpose);
+                for (j = 0; j < maxpurpose - strlen(results[i].purpose); j++)
+                    printf(" ");
+
+                printf("|%s", results[i].password);
+                for (j = 0; j < maxpassword - strlen(results[i].password); j++)
+                    printf(" ");
+
+                printf("|\n");
+            }
+
+            free(results);
         }
     }
     else if (strcmp(type, "for") == 0)
     {
+        int j = 0;
+        int matches = 0;
+
         for (i = 0; i <= lines; i++)
         {
             if (strcmp(document[i].purpose, attr) == 0)
-                printf("|%-5d|%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
+            {
+                matches++;
+            }
+        }
+
+        if (matches == 0)
+        {
+            printf("No matching records found\n");
+        }
+        else
+        {
+            DBRow* results = malloc(sizeof(DBRow) * matches);
+
+            for (i = 0; i <= lines; i++)
+            {
+                if (strcmp(document[i].purpose, attr) == 0)
+                {
+                    results[j] = document[i];
+                    j++;
+                }
+            }
+
+            int maxlogin, maxpurpose, maxpassword;
+            maxlogin = 15;
+            maxpurpose = 20;
+            maxpassword = 30;
+
+            for (i = 0; i < matches; i++)
+            {
+                if (strlen(results[i].login) > maxlogin)
+                    maxlogin = strlen(results[i].login);
+
+                if (strlen(results[i].purpose) > maxpurpose)
+                    maxpurpose = strlen(results[i].purpose);
+
+                if (strlen(results[i].password) > maxpassword)
+                    maxpassword = strlen(results[i].password);
+            }
+
+            printf("|ID   ");
+            printf("|USERNAME");
+            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
+                printf(" ");
+
+            printf("|FOR");
+            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
+                printf(" ");
+
+            printf("|PASSWORD");
+            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
+                printf(" ");
+
+            printf("|\n");
+
+            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
+                printf("-");
+            printf("\n");
+
+            for (i = 0; i < matches; i++)
+            {
+                printf("|%-5d", results[i].id);
+
+                printf("|%s", results[i].login);
+                for (j = 0; j < maxlogin - strlen(results[i].login); j++)
+                    printf(" ");
+
+                printf("|%s", results[i].purpose);
+                for (j = 0; j < maxpurpose - strlen(results[i].purpose); j++)
+                    printf(" ");
+
+                printf("|%s", results[i].password);
+                for (j = 0; j < maxpassword - strlen(results[i].password); j++)
+                    printf(" ");
+
+                printf("|\n");
+            }
+
+            free(results);
         }
     }
     else if (strcmp(type, "password") == 0)
     {
+        int j = 0;
+        int matches = 0;
+
         for (i = 0; i <= lines; i++)
         {
             if (strcmp(document[i].password, attr) == 0)
-                printf("|%-5d|%-15s|%-20s|%-30s|\n", document[i].id, document[i].login, document[i].purpose, document[i].password);
+            {
+                matches++;
+            }
+        }
+
+        if (matches == 0)
+        {
+            printf("No matching records found\n");
+        }
+        else
+        {
+            DBRow* results = malloc(sizeof(DBRow) * matches);
+
+            for (i = 0; i <= lines; i++)
+            {
+                if (strcmp(document[i].password, attr) == 0)
+                {
+                    results[j] = document[i];
+                    j++;
+                }
+            }
+
+            int maxlogin, maxpurpose, maxpassword;
+            maxlogin = 15;
+            maxpurpose = 20;
+            maxpassword = 30;
+
+            for (i = 0; i < matches; i++)
+            {
+                if (strlen(results[i].login) > maxlogin)
+                    maxlogin = strlen(results[i].login);
+
+                if (strlen(results[i].purpose) > maxpurpose)
+                    maxpurpose = strlen(results[i].purpose);
+
+                if (strlen(results[i].password) > maxpassword)
+                    maxpassword = strlen(results[i].password);
+            }
+
+            printf("|ID   ");
+            printf("|USERNAME");
+            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
+                printf(" ");
+
+            printf("|FOR");
+            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
+                printf(" ");
+
+            printf("|PASSWORD");
+            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
+                printf(" ");
+
+            printf("|\n");
+
+            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
+                printf("-");
+            printf("\n");
+
+            for (i = 0; i < matches; i++)
+            {
+                printf("|%-5d", results[i].id);
+
+                printf("|%s", results[i].login);
+                for (j = 0; j < maxlogin - strlen(results[i].login); j++)
+                    printf(" ");
+
+                printf("|%s", results[i].purpose);
+                for (j = 0; j < maxpurpose - strlen(results[i].purpose); j++)
+                    printf(" ");
+
+                printf("|%s", results[i].password);
+                for (j = 0; j < maxpassword - strlen(results[i].password); j++)
+                    printf(" ");
+
+                printf("|\n");
+            }
+
+            free(results);
         }
     }
     else
@@ -258,7 +561,7 @@ void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines)
     }
 }
 
-void WriteToFile(char* pathtofile, struct DBRow *document, int lines)
+void WriteToFile(char* pathtofile, DBRow *document, int lines)
 {
     FILE* file = fopen(pathtofile, "w");
 
@@ -278,7 +581,7 @@ void WriteToFile(char* pathtofile, struct DBRow *document, int lines)
     }
 }
 
-void AppendToFile(char* pathtofile, struct DBRow info, int lines)
+void AppendToFile(char* pathtofile, DBRow info, int lines)
 {
     FILE* file = fopen(pathtofile, "a");
 

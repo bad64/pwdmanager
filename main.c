@@ -1,6 +1,6 @@
 #include "includes.h"
 
-int main()
+int main(int argc, char* argv[])
 {
     srand(GetSeed());
 
@@ -65,8 +65,60 @@ int main()
         chmod(user.fullpath, S_IRWXU);
     #endif
 
-    struct DBRow* document = malloc(100 * sizeof(struct DBRow));
+    DBRow* document = malloc(100 * sizeof(DBRow));
     ReadFromFile(user.fullpath, document);
+
+    //Parse command line args
+    if (argc > 1)
+    {
+        int i;
+        for (i = 0; i < argc; i++)
+        {
+            if ((strcmp(argv[i], "help") == 0) || (strcmp(argv[i], "?") == 0))
+            {
+                printf("Command line options:\n");
+                printf("    help or ?: Display this help screen\n");
+                printf("    view or ls: Lists all entries in the local record\n");
+                printf("    get <type> <expression>: Returns all table entries which have at least one term matching with the expression\n");
+                printf("        <attribute> can be either \"id\", \"username\", \"user\", \"for\", or \"password\"\n");
+                printf("        <expression> is a case sensitive string to search for in the database\n");
+                printf("            -If <expression> should have spaces in it, replace them with + signs !\n");
+                return 0;
+            }
+            else if ((strcmp(argv[i], "view") == 0) || (strcmp(argv[i], "ls") == 0))
+            {
+                lines = GetNumberOfLines(user.fullpath);
+                ReadFromFile(user.fullpath, document);  //Reload db
+                View(document, lines);
+
+                return 0;
+            }
+            else if (strcmp(argv[i], "get") == 0)
+            {
+                if (argv[i+1] == NULL)
+                {
+                    printf("Missing parameter: type\n");
+                    return -1;
+                }
+                else
+                {
+                    if (argv[i+2] == NULL)
+                    {
+                        printf("Missing parameter: expression\n");
+                        return -1;
+                    }
+                    else
+                    {
+                        lines = GetNumberOfLines(user.fullpath);
+                        ReadFromFile(user.fullpath, document);
+                        GetByAttribute(argv[i+1], argv[i+2], document, lines);
+
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
 
     //Some useful stuff
     char prompt[5] = ">>> ";        //Looks cool
@@ -186,7 +238,7 @@ int main()
                 if ((strcmp(args[1], "help") == 0) || (strcmp(args[1], "?") == 0))
                 {
                     printf("Usage: get <attribute> <expression>\n");
-                    printf("    <attribute> can be either \"id\", \"username\", \"for\", or \"password\"\n");
+                    printf("    <attribute> can be either \"id\", \"username\", \"user\", \"for\", or \"password\"\n");
                     printf("    <expression> is a case sensitive string to search for in the database\n");
                     printf("        -If <expression> should have spaces in it, replace them with + signs !\n");
                 }
