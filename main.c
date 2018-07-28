@@ -175,6 +175,7 @@ int main(int argc, char* argv[])
             printf("    new: Generates a new entry in the local records\n");
             printf("    add: Adds an entry with user-defined (instead of generated) password to the local records\n");
             printf("    view or ls: Lists all entries in the local record\n");
+            printf("    copy <row>: Copies the password field in row <row> to the clipboard (Windows Only)\n");
             printf("    delete <row>: Deletes table entry corresponding to row number\n");
             printf("    get <type> <expression>: Returns all table entries which have at least one term matching with the expression\n");
             printf("    exit: Closes the program\n");
