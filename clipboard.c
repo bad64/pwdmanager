@@ -3,7 +3,7 @@
 void CopyToClipboard(DBRow* document, int line)
 {
     #if (defined (_WIN32) || defined (_WIN64))
-        HGLOBAL memblock = GlobalAlloc(GMEM_MOVEABLE, strlen(document[line].password)+1);
+        HGLOBAL memblock = GlobalAlloc(GMEM_MOVEABLE, strlen(document[line].password)+1);   //+1 because GlobalAlloc() needs to allocate a space for the null terminator
         memcpy(GlobalLock(memblock), document[line].password, strlen(document[line].password));
         GlobalUnlock(memblock);
 

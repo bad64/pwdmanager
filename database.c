@@ -1,5 +1,64 @@
 #include "includes.h"
 
+void PrettyPrint(DBRow* array, int matches)
+{
+    int i, j = 0;
+    int maxlogin, maxpurpose, maxpassword;
+    maxlogin = 15;
+    maxpurpose = 20;
+    maxpassword = 30;
+
+    for (i = 0; i < matches; i++)
+    {
+        if (strlen(array[i].login) > maxlogin)
+            maxlogin = strlen(array[i].login);
+
+        if (strlen(array[i].purpose) > maxpurpose)
+            maxpurpose = strlen(array[i].purpose);
+
+        if (strlen(array[i].password) > maxpassword)
+            maxpassword = strlen(array[i].password);
+    }
+
+    printf("|ID   ");
+    printf("|USERNAME");
+    for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
+        printf(" ");
+
+    printf("|FOR");
+    for (i = 0; i < maxpurpose - strlen("FOR"); i++)
+        printf(" ");
+
+    printf("|PASSWORD");
+    for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
+        printf(" ");
+
+    printf("|\n");
+
+    for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
+        printf("-");
+    printf("\n");
+
+    for (i = 0; i < matches; i++)
+    {
+        printf("|%-5d", array[i].id);
+
+        printf("|%s", array[i].login);
+        for (j = 0; j < maxlogin - strlen(array[i].login); j++)
+            printf(" ");
+
+        printf("|%s", array[i].purpose);
+        for (j = 0; j < maxpurpose - strlen(array[i].purpose); j++)
+            printf(" ");
+
+        printf("|%s", array[i].password);
+        for (j = 0; j < maxpassword - strlen(array[i].password); j++)
+            printf(" ");
+
+        printf("|\n");
+    }
+}
+
 void ReadFromFile(char* pathtofile, DBRow *document)
 {
     FILE* file = fopen(pathtofile, "r");
@@ -319,62 +378,7 @@ void GetByAttribute(char *type, char *attr, DBRow *document, int lines)
                 }
             }
 
-            //Pretty printout, ENGAGE
-
-            int maxlogin, maxpurpose, maxpassword;
-            maxlogin = 15;
-            maxpurpose = 20;
-            maxpassword = 30;
-
-            for (i = 0; i < matches; i++)
-            {
-                if (strlen(results[i].login) > maxlogin)
-                    maxlogin = strlen(results[i].login);
-
-                if (strlen(results[i].purpose) > maxpurpose)
-                    maxpurpose = strlen(results[i].purpose);
-
-                if (strlen(results[i].password) > maxpassword)
-                    maxpassword = strlen(results[i].password);
-            }
-
-            printf("|ID   ");
-            printf("|USERNAME");
-            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
-                printf(" ");
-
-            printf("|FOR");
-            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
-                printf(" ");
-
-            printf("|PASSWORD");
-            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
-                printf(" ");
-
-            printf("|\n");
-
-            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
-                printf("-");
-            printf("\n");
-
-            for (i = 0; i < matches; i++)
-            {
-                printf("|%-5d", results[i].id);
-
-                printf("|%s", results[i].login);
-                for (j = 0; j < maxlogin - strlen(results[i].login); j++)
-                    printf(" ");
-
-                printf("|%s", results[i].purpose);
-                for (j = 0; j < maxpurpose - strlen(results[i].purpose); j++)
-                    printf(" ");
-
-                printf("|%s", results[i].password);
-                for (j = 0; j < maxpassword - strlen(results[i].password); j++)
-                    printf(" ");
-
-                printf("|\n");
-            }
+            PrettyPrint(results, matches);
 
             free(results);
         }
@@ -409,60 +413,7 @@ void GetByAttribute(char *type, char *attr, DBRow *document, int lines)
                 }
             }
 
-            int maxlogin, maxpurpose, maxpassword;
-            maxlogin = 15;
-            maxpurpose = 20;
-            maxpassword = 30;
-
-            for (i = 0; i < matches; i++)
-            {
-                if (strlen(results[i].login) > maxlogin)
-                    maxlogin = strlen(results[i].login);
-
-                if (strlen(results[i].purpose) > maxpurpose)
-                    maxpurpose = strlen(results[i].purpose);
-
-                if (strlen(results[i].password) > maxpassword)
-                    maxpassword = strlen(results[i].password);
-            }
-
-            printf("|ID   ");
-            printf("|USERNAME");
-            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
-                printf(" ");
-
-            printf("|FOR");
-            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
-                printf(" ");
-
-            printf("|PASSWORD");
-            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
-                printf(" ");
-
-            printf("|\n");
-
-            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
-                printf("-");
-            printf("\n");
-
-            for (i = 0; i < matches; i++)
-            {
-                printf("|%-5d", results[i].id);
-
-                printf("|%s", results[i].login);
-                for (j = 0; j < maxlogin - strlen(results[i].login); j++)
-                    printf(" ");
-
-                printf("|%s", results[i].purpose);
-                for (j = 0; j < maxpurpose - strlen(results[i].purpose); j++)
-                    printf(" ");
-
-                printf("|%s", results[i].password);
-                for (j = 0; j < maxpassword - strlen(results[i].password); j++)
-                    printf(" ");
-
-                printf("|\n");
-            }
+            PrettyPrint(results, matches);
 
             free(results);
         }
@@ -497,60 +448,7 @@ void GetByAttribute(char *type, char *attr, DBRow *document, int lines)
                 }
             }
 
-            int maxlogin, maxpurpose, maxpassword;
-            maxlogin = 15;
-            maxpurpose = 20;
-            maxpassword = 30;
-
-            for (i = 0; i < matches; i++)
-            {
-                if (strlen(results[i].login) > maxlogin)
-                    maxlogin = strlen(results[i].login);
-
-                if (strlen(results[i].purpose) > maxpurpose)
-                    maxpurpose = strlen(results[i].purpose);
-
-                if (strlen(results[i].password) > maxpassword)
-                    maxpassword = strlen(results[i].password);
-            }
-
-            printf("|ID   ");
-            printf("|USERNAME");
-            for (i = 0; i < maxlogin - strlen("USERNAME"); i++)
-                printf(" ");
-
-            printf("|FOR");
-            for (i = 0; i < maxpurpose - strlen("FOR"); i++)
-                printf(" ");
-
-            printf("|PASSWORD");
-            for (i = 0; i < maxpassword - strlen("PASSWORD"); i++)
-                printf(" ");
-
-            printf("|\n");
-
-            for (i = 0; i < 5 + maxlogin + maxpurpose + maxpassword + 5; i++)
-                printf("-");
-            printf("\n");
-
-            for (i = 0; i < matches; i++)
-            {
-                printf("|%-5d", results[i].id);
-
-                printf("|%s", results[i].login);
-                for (j = 0; j < maxlogin - strlen(results[i].login); j++)
-                    printf(" ");
-
-                printf("|%s", results[i].purpose);
-                for (j = 0; j < maxpurpose - strlen(results[i].purpose); j++)
-                    printf(" ");
-
-                printf("|%s", results[i].password);
-                for (j = 0; j < maxpassword - strlen(results[i].password); j++)
-                    printf(" ");
-
-                printf("|\n");
-            }
+            PrettyPrint(results, matches);
 
             free(results);
         }

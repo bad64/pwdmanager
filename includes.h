@@ -28,6 +28,7 @@ struct User
     char dbFile[10];
 };
 
+typedef struct DBRow DBRow;
 struct DBRow
 {
     unsigned int id;
@@ -41,16 +42,20 @@ int randint(int minvalue, int maxvalue);
 unsigned long GetSeed();
 
 //random.c
-struct DBRow Generate(User user, int lines);
-struct DBRow Add(User user, int lines);
+DBRow Generate(User user, int lines);
+DBRow Add(User user, int lines);
 
 //database.c
-void ReadFromFile(char* pathtofile, struct DBRow *document);
+void PrettyPrint(DBRow* array, int matches);
+void ReadFromFile(char* pathtofile, DBRow *document);
 int GetNumberOfLines(char* pathtofile);
-void View(struct DBRow *document, int lines);
-void DeleteRow(char* pathtofile, struct DBRow *document, int line);
-void GetByAttribute(char *type, char *attr, struct DBRow *document, int lines);
-void WriteToFile(char* pathtofile, struct DBRow *document, int lines);
-void AppendToFile(char* pathtofile, struct DBRow info, int lines);
+void View(DBRow *document, int lines);
+void DeleteRow(char* pathtofile, DBRow *document, int line);
+void GetByAttribute(char *type, char *attr, DBRow *document, int lines);
+void WriteToFile(char* pathtofile, DBRow *document, int lines);
+void AppendToFile(char* pathtofile, DBRow info, int lines);
+
+//clipboard.c
+void CopyToClipboard(DBRow* document, int line);
 
 #endif // INCLUDES_H
