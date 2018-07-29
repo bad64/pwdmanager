@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
                 printf("    get <type> <expression>: Returns all table entries which have at least one term matching with the expression\n");
                 printf("        <attribute> can be either \"id\", \"username\", \"user\", \"for\", or \"password\"\n");
                 printf("        <expression> is a case sensitive string to search for in the database\n");
-                printf("            -If <expression> should have spaces in it, replace them with + signs !\n");
+                printf("            -If <expression> should have spaces in it, put it between double quotes\n");
                 return 0;
             }
             else if ((strcmp(argv[i], "view") == 0) || (strcmp(argv[i], "ls") == 0))
@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
     {
         //Empty buffer strings
         input[0] = '\0';
-        args[0] = '\0';
+        //args[0] = '\0';
 
         //Print the prompt
         printf("%s", prompt);
@@ -144,8 +144,9 @@ int main(int argc, char* argv[])
         input[strlen(input)-1] = '\0';
 
         //Split input into arguments
+        unsigned char i, j = 0;
+        int argcount = 0;
         argbuffer = strtok(input, " ");
-        unsigned char i = 0;
 
         for (i = 0; i < 10; i++)
         {
@@ -155,8 +156,65 @@ int main(int argc, char* argv[])
             }
             else
             {
+                argcount++;
                 args[i] = argbuffer;
                 argbuffer = strtok(NULL, " ");
+            }
+        }
+
+        for (i = 0; i < argcount; i++)
+        {
+            if (i+1 == argcount)
+            {
+                if (args[i][0] == '"')
+                {
+                    args[i][strlen(args[i])] = '\0';
+
+                    for (j = 0; j < strlen(args[i]); j++)
+                    {
+                        if (args[i][j] == '\0')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            args[i][j] = args[i][j+1];
+                        }
+                    }
+                    args[i][strlen(args[i])-1] = '\0';
+
+                }
+            }
+            else
+            {
+                if (args[i][0] == '"')
+                {
+                    for (j = 0; j < strlen(args[i]); j++)
+                    {
+                        if (args[i][j] == '\0')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            args[i][j] = args[i][j+1];
+                        }
+                    }
+                    args[i+1][strlen(args[i+1])-1] = '\0';
+
+                    char* buffer = (char *)malloc(strlen(args[i]));
+                    strcpy(buffer, args[i]);
+
+                    sprintf(args[i], "%s %s", buffer, args[i+1]);
+
+                    for (j = i+1; j < argcount; j++)
+                    {
+                        args[j] = args[j+1];
+                    }
+
+                    argcount -= 1;
+                    free(buffer);
+                }
             }
         }
 
@@ -241,7 +299,7 @@ int main(int argc, char* argv[])
                     printf("Usage: get <attribute> <expression>\n");
                     printf("    <attribute> can be either \"id\", \"username\", \"user\", \"for\", or \"password\"\n");
                     printf("    <expression> is a case sensitive string to search for in the database\n");
-                    printf("        -If <expression> should have spaces in it, replace them with + signs !\n");
+                    printf("        -If <expression> should have spaces in it, put it between double quotes\n");
                 }
                 else if (args[2] == NULL)
                 {
