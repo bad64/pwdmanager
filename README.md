@@ -1,3 +1,4 @@
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 # Password manager console
 
 One day I woke up with a notification that someone tried to use my Gmail account, only to be thwarted by 2FA. Anyone's normal reaction to that would be to change one's password, right ? Well, not me. Having nothing better to do, I decided to implement my own keyring system, just to see if I could.
